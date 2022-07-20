@@ -119,23 +119,23 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Flip Right") && flipLeft == true)
-        {
-            flipLeft = false;
-            //animator.Play("Flip Right");
-        }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Flip Right") && flipLeft == true)
+    //    {
+    //        flipLeft = false;
+    //        //animator.Play("Flip Right");
+    //    }
 
-        if (collision.CompareTag("Flip Left") && flipLeft == false)
-        {
-            flipLeft = true;
+    //    if (collision.CompareTag("Flip Left") && flipLeft == false)
+    //    {
+    //        flipLeft = true;
             //animator.Play("Flip Left");
-        }
+    //    }
 
-        if (collision.CompareTag("Stop"))
-        {
-            isMove = false;
-        }
-    }
+    //    if (collision.CompareTag("Stop"))
+    //    {
+    //        isMove = false;
+    //    }
+    //}
 }
