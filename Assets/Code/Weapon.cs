@@ -7,16 +7,15 @@ public class Weapon : MonoBehaviour
     public Transform firePoint;
     public GameObject bulletPrefab;
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (Input.GetButtonDown("Fire1"))
         {
             Shoot();
-        } 
+        }
     }
 
-    void Shoot()
+    public void Shoot()
     {
         GameObject bullet = ObjectPool.instance.GetPooledObject();
 

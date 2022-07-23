@@ -4,138 +4,93 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public bool allowFlip = false;
-    public bool freeMovement = false;
-    public bool autoThrustForward = true;
     [Space(8)]
     public bool shipAlive = true;
-    public float moveSpeed = 5;
-    public Rigidbody2D rb;
     //public Animator animator;
-
-    Vector2 movement;
-    Vector2 animationMove;
     bool flipLeft;
-    bool isMove;
+    private Rigidbody2D rb;
+
+    public float moveSpeed;
+    Vector2 movement;
+
+
+    [Header("Dashing")]
+    [SerializeField] private float dashingVelocity = 14f;
+    [SerializeField] private float dashingTime = 0.5f;
+    private Vector2 dashingDir;
+    private bool isDashing;
+    private bool canDash = true;
+    private TrailRenderer _trailRenderer;
+
 
     void Start()
     {
-        isMove = true;
         flipLeft = true;
+        rb = GetComponent<Rigidbody2D>();
+        _trailRenderer = GetComponent<TrailRenderer>();
     }
 
     void Update()
     {
-        bool moveCommandAvailable = false;
-        
-        if (flipLeft == true)
+        var dashInput = Input.GetButtonDown("Dash");
+
+        if (dashInput && canDash)
         {
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            isDashing = true;
+            canDash = false;
+            _trailRenderer.emitting = true;
+            dashingDir = new Vector2(Input.GetAxisRaw("Horizontal"), y: 0);
+            if (dashingDir == Vector2.zero)
             {
-                movement.x = 1.4f;
-                moveCommandAvailable = true;
+                dashingDir = new Vector2(transform.localScale.x, y: 0);
             }
-            else if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q)))
-            {
-                if (freeMovement)
-                    movement.x = -0.6f;
-                else
-                    movement.x = 0.6f;
-
-                moveCommandAvailable = true;
-            }
-            else
-            {
-                movement.x = 1f;
-            }
-        }
-        else if (flipLeft == false)
-        {
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-            {
-                if (freeMovement)
-                    movement.x = 0.6f;
-                else
-                    movement.x = -0.6f;
-
-                moveCommandAvailable = true;
-            }
-            else if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q)))
-            {
-                movement.x = -1.4f;
-                moveCommandAvailable = true;
-            }
-            else
-            {
-                movement.x = -1f;
-            }
-        }
-        
-        movement.y = Input.GetAxisRaw("Vertical");
-        //animationMove.y = Input.GetAxisRaw("Vertical");
-        //animator.SetFloat("Vertical", animationMove.y);
-
-        if (moveCommandAvailable || autoThrustForward)
-        {
-
-            //animationMove.x = Input.GetAxisRaw("Horizontal");
-
-            //animator.SetFloat("Horizontal", animationMove.x);
-            //animator.SetFloat("Speed", animationMove.sqrMagnitude);
-        }
-        else
-        {
-            movement.x = 0;
-            // movement.y = 0;
+            StartCoroutine(routine: StopDashing());
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (isDashing)
         {
-            isMove = true;
+            rb.velocity = dashingDir.normalized * dashingVelocity;
+            return;
         }
 
         // -------------------------------------------------------------------------------------
 
-        if (allowFlip)
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
+
+        // -------------------------------------------------------------------------------------
+
+        if (Input.GetKeyDown(KeyCode.E) && flipLeft == true)
         {
-            if (Input.GetKeyDown(KeyCode.E) && flipLeft == true)
-            {
-                flipLeft = false;
-                //animator.Play("Flip Right");
-            }
-            else if (Input.GetKeyDown(KeyCode.E) && flipLeft == false)
-            {
-                flipLeft = true;
-                //animator.Play("Flip Left");
-            }
+            flipLeft = false;
+            //animator.Play("Flip Right");
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && flipLeft == false)
+        {
+            flipLeft = true;
+            //animator.Play("Flip Left");
         }
     }
 
     private void FixedUpdate()
     {
-        if (isMove == true && shipAlive)
+        if (isDashing)
+        {
+            return;
+        }
+
+        canDash = true;
+
+        if (shipAlive)
         {
             rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
         }
     }
 
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Flip Right") && flipLeft == true)
-    //    {
-    //        flipLeft = false;
-    //        //animator.Play("Flip Right");
-    //    }
-
-    //    if (collision.CompareTag("Flip Left") && flipLeft == false)
-    //    {
-    //        flipLeft = true;
-            //animator.Play("Flip Left");
-    //    }
-
-    //    if (collision.CompareTag("Stop"))
-    //    {
-    //        isMove = false;
-    //    }
-    //}
+    private IEnumerator StopDashing()
+    {
+        yield return new WaitForSeconds(dashingTime);
+        _trailRenderer.emitting = false;
+        isDashing = false;
+    }
 }

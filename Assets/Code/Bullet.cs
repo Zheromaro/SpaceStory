@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 20f;
+    public int damege = 40;
     [SerializeField] private Rigidbody2D rb;
 
 
@@ -18,7 +19,18 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        Instantiate(impactEffect, transform.position, transform.rotation);
+        Enemy enemy = hitInfo.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamege(damege);
+        }
+
+        GameObject effect = ObjectPool.instance.GetPooledEffect();
+         if (effect != null)
+        {
+            effect.transform.position = transform.position;
+            effect.SetActive(true);
+        }
 
         gameObject.SetActive(false);
     }
