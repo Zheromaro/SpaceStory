@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 20f;
-    public int damege = 40;
+    public int damage = 40;
     [SerializeField] private Rigidbody2D rb;
 
 
@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour
         Enemy enemy = hitInfo.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.TakeDamege(damege);
+            enemy.TakeDamage(damage);
         }
 
         GameObject effect = ObjectPool.instance.GetPooledEffect();

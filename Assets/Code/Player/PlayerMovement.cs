@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public bool shipAlive = true;
     //public Animator animator;
     bool flipLeft;
-    private Rigidbody2D rb;
+    [SerializeField]private Rigidbody2D rb;
 
     public float moveSpeed;
     Vector2 movement;
@@ -39,10 +39,10 @@ public class PlayerMovement : MonoBehaviour
             isDashing = true;
             canDash = false;
             _trailRenderer.emitting = true;
-            dashingDir = new Vector2(Input.GetAxisRaw("Horizontal"), y: 0);
+            dashingDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             if (dashingDir == Vector2.zero)
             {
-                dashingDir = new Vector2(transform.localScale.x, y: 0);
+                dashingDir = new Vector2(transform.localScale.x, transform.localScale.y);
             }
             StartCoroutine(routine: StopDashing());
         }
