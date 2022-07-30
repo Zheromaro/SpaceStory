@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Grase rule
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -1060842315, guid: 58720dfa72038c3439f5f383089d2c16, type: 3}
+  m_DefaultSprite: {fileID: -1144394359, guid: 58720dfa72038c3439f5f383089d2c16, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
