@@ -9,12 +9,14 @@ public class PlayerMovement : MonoBehaviour
     public event EventHandler OnDashBack;
 
     [Space(8)]
+    private Animator animator;
+    private Rigidbody2D rb;
     public bool shipAlive = true;
-    //public Animator animator;
-    bool flipLeft;
-    [SerializeField]private Rigidbody2D rb;
 
-    public float moveSpeed;
+    [Header("Movement")]
+    [SerializeField] private AnimationCurve movementCurve;
+    private float moveCurve;
+    private float time;
     Vector2 movement;
 
     [Header("Dashing")]
@@ -30,8 +32,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        flipLeft = true;
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         _trailRenderer = GetComponent<TrailRenderer>();
     }
 
@@ -59,30 +61,26 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (DashTimes == 3)
-        {
-            canDash = true;
-        }
-        else if (DashTimes == 0)
+        if (DashTimes == 0)
         {
             canDash = false;
         }
+        else if (DashTimes <= 3)
+        {
+            canDash = true;
+        }
         // -------------------------------------------------------------------------------------
 
+        time += Time.deltaTime;
+        moveCurve = movementCurve.Evaluate(time);
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
         // -------------------------------------------------------------------------------------
 
-        if (Input.GetKeyDown(KeyCode.E) && flipLeft == true)
+        if (Input.GetKeyDown(KeyCode.RightShift))
         {
-            flipLeft = false;
-            //animator.Play("Flip Right");
-        }
-        else if (Input.GetKeyDown(KeyCode.E) && flipLeft == false)
-        {
-            flipLeft = true;
-            //animator.Play("Flip Left");
+            transform.Rotate(0f, 180f, 0f);
         }
     }
 
@@ -95,18 +93,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (shipAlive)
         {
-            rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + movement * moveCurve * Time.fixedDeltaTime);
+
         }
     }
 
     private IEnumerator StopDashing()
-    {
-        yield return new WaitForSeconds(dashingTime);
-        _trailRenderer.emitting = false;
-        isDashing = false;
-    }
-
-    private IEnumerator ContinueDashing()
     {
         yield return new WaitForSeconds(dashingTime);
         _trailRenderer.emitting = false;

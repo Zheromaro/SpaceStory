@@ -16,11 +16,11 @@ public class StaminaUIvisual : MonoBehaviour
     {
         staminaImage = transform.Find("Stamina").GetComponent<Image>();
         usedStaminaImage = transform.Find("UsedStamina").GetComponent<Image>();
-        playerMovement = transform.parent.GetComponent<PlayerMovement>();
     }
 
     private void Start()
     {
+        playerMovement = transform.parent.GetComponent<PlayerMovement>();
         playerMovement.Stamina(3);
         SetStamina(playerMovement.GetStaminaNormalized());
         usedStaminaImage.fillAmount = staminaImage.fillAmount;
@@ -31,7 +31,7 @@ public class StaminaUIvisual : MonoBehaviour
 
     private void Update()
     {
-        usedStaminaShrinkTimer = Time.deltaTime;
+        usedStaminaShrinkTimer -= Time.deltaTime;
         if (usedStaminaShrinkTimer < 0)
         {
             if (staminaImage.fillAmount < usedStaminaImage.fillAmount)

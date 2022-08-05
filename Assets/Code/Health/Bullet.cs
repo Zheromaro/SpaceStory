@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void FixedUpdate()
     {
-        rb.velocity = Vector2.right * speed;
+        rb.velocity = transform.right * speed;
     }
 
     void OnTriggerEnter2D(Collider2D hitInfo)

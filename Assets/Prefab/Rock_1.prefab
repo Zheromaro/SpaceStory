@@ -138,4 +138,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   damage: 20
+  drops: 2
+  dropLootPrefab: {fileID: 4634583465194707373, guid: 12793918b5e42b548b801e3a206d55e6, type: 3}
   deathEffect: {fileID: 0}

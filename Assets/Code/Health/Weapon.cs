@@ -21,6 +21,7 @@ public class Weapon : MonoBehaviour
 
         if (bullet != null)
         {
+            bullet.transform.rotation = firePoint.rotation;
             bullet.transform.position = firePoint.position;
             bullet.SetActive(true);
         }

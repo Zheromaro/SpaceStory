@@ -12,6 +12,14 @@ public class PlayerStatsSystem : MonoBehaviour
     private int healthAmount;
     private int healthAmountMax;
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("DropLoot"))
+        {
+            Heal(20);
+        }
+    }
+
     public void Health(int healthAmount)
     {
         healthAmountMax = healthAmount;
