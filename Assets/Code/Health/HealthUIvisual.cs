@@ -56,7 +56,7 @@ public class HealthUIvisual : MonoBehaviour
     }
     private void HealthSystem_OnDead(object sender, System.EventArgs e)
     {
-        throw new System.NotImplementedException();
+        FindObjectOfType<GameManager>().EndGame();
     }
 
     private void SetHealth(float healthNormalized)

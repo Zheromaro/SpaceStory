@@ -12,12 +12,9 @@ public class PlayerStatsSystem : MonoBehaviour
     private int healthAmount;
     private int healthAmountMax;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void Update()
     {
-        if (collision.gameObject.CompareTag("DropLoot"))
-        {
-            Heal(20);
-        }
+        StartCoroutine("Dead");
     }
 
     public void Health(int healthAmount)
@@ -47,14 +44,15 @@ public class PlayerStatsSystem : MonoBehaviour
         if (OnHealed != null) OnHealed(this, EventArgs.Empty);
     }
 
-    public void Dead()
+    public IEnumerator Dead()
     {
         if (healthAmount <= 0)
         {
-            Destroy(gameObject);
-        }
+            if (OnDead != null) OnDead(this, EventArgs.Empty);
 
-        if (OnDead != null) OnDead(this, EventArgs.Empty);
+            yield return new WaitForSeconds(1);
+            gameObject.SetActive(false);
+        }
     }
 
     public float GetHealthNormalized()

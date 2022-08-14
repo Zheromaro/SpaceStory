@@ -235,7 +235,7 @@ TextureImporter:
       - - {x: -8, y: 8}
         - {x: -8, y: -8}
         - {x: 5, y: -8}
-        - {x: 8, y: -5}
+        - {x: 8, y: -8}
         - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
@@ -259,7 +259,7 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: 8}
-        - {x: -8, y: -5}
+        - {x: -8, y: -8}
         - {x: -5, y: -8}
         - {x: 8, y: -8}
         - {x: 8, y: 8}
@@ -775,8 +775,10 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 5}
-        - {x: -8, y: -8}
+      - - {x: -3, y: 5}
+        - {x: -5, y: 3}
+        - {x: -5, y: -6}
+        - {x: -3, y: -8}
         - {x: 8, y: -8}
         - {x: 8, y: 5}
       tessellationDetail: 0
@@ -802,10 +804,8 @@ TextureImporter:
       physicsShape:
       - - {x: -8, y: 5}
         - {x: -8, y: -8}
-        - {x: 3, y: -8}
-        - {x: 5, y: -6}
-        - {x: 5, y: 3}
-        - {x: 3, y: 5}
+        - {x: 8, y: -8}
+        - {x: 8, y: 5}
       tessellationDetail: 0
       bones: []
       spriteID: 9e95b4a529e8c9443a7f38a39dacf168
@@ -827,10 +827,8 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -3, y: 5}
-        - {x: -5, y: 3}
-        - {x: -5, y: -6}
-        - {x: -3, y: -8}
+      - - {x: -8, y: 5}
+        - {x: -8, y: -8}
         - {x: 3, y: -8}
         - {x: 5, y: -6}
         - {x: 5, y: 3}
@@ -855,7 +853,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -3, y: 5}
+        - {x: -5, y: 3}
+        - {x: -5, y: -6}
+        - {x: -3, y: -8}
+        - {x: 3, y: -8}
+        - {x: 5, y: -6}
+        - {x: 5, y: 3}
+        - {x: 3, y: 5}
       tessellationDetail: 0
       bones: []
       spriteID: 1cded95052b8ff340b1737eb11c08d44
@@ -984,7 +990,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Grase Normal_11: -1783197544
+      Grase Normal_18: -298781018
       Grase Normal_9: 1938512571
       Grase Normal_13: 518944984
       Grase Normal_32: 1252107792
@@ -1018,7 +1024,7 @@ TextureImporter:
       Grase Normal_6: 1248018849
       Grase Normal_2: 1653622950
       Grase Normal_3: -1053916584
-      Grase Normal_18: -298781018
+      Grase Normal_11: -1783197544
       Grase Normal_0: -1379294417
   spritePackingTag: 
   pSDRemoveMatte: 0

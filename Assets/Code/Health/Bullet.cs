@@ -8,10 +8,6 @@ public class Bullet : MonoBehaviour
     public int damage = 40;
     [SerializeField] private Rigidbody2D rb;
 
-
-    public GameObject impactEffect;
-
-    // Start is called before the first frame update
     void FixedUpdate()
     {
         rb.velocity = transform.right * speed;
