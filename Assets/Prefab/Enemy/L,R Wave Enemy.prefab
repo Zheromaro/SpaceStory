@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104632242136625868}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.127134, y: 0.08125004, z: -0.07010593}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -159,5 +159,4 @@ MonoBehaviour:
   health: 100
   damage: 20
   drops: 2
-  dropLootPrefab: {fileID: 4634583465194707373, guid: 12793918b5e42b548b801e3a206d55e6, type: 3}
   deathEffect: {fileID: 8460667080445658512, guid: a3e2c3406e02f2c4ba86cfb1604277bd, type: 3}

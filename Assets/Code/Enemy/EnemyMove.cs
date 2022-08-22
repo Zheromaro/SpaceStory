@@ -15,6 +15,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] private float moveSpeed = 5;
 
     private Rigidbody2D rb;
+    private HealthEnemy healthEnemy;
 
     bool Move;
 
@@ -22,6 +23,7 @@ public class EnemyMove : MonoBehaviour
 
     private void Start()
     {
+        healthEnemy = GetComponent<HealthEnemy>();
         rb = GetComponent<Rigidbody2D>();
         startPos = transform.position;
         Move = true;
@@ -53,6 +55,11 @@ public class EnemyMove : MonoBehaviour
             Pos.y -= moveSpeed * Time.fixedDeltaTime;
         }
 
+        if (healthEnemy._EnemyHealth.Health <= 0)
+        {
+            Move = false;
+        }
+
         if (Move == true)
         {
             rb.MovePosition(Pos);
@@ -61,14 +68,10 @@ public class EnemyMove : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
         if (collision.CompareTag("Wall"))
         {
             moveSpeed = moveSpeed * -1;
         }
-        else
-        {
-            Move = false;
-        }
-
     }
 }
