@@ -2,8 +2,7 @@
     "name": "Code.Weapon",
     "rootNamespace": "",
     "references": [
-        "GUID:e8d6825a964f44d489fdd7d4afaf6003",
-        "GUID:eac1a46212961cf4e84a6140d278f760"
+        "GUID:e8d6825a964f44d489fdd7d4afaf6003"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

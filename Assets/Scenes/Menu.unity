@@ -2598,6 +2598,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d524b157ab207d04c8f2d34a69948add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneFader: {fileID: 3356063603337590127}
+  slowdownFactor: 0.05
+  slowdownLength: 2
+  waiting: 0
   gameOverMenu: {fileID: 0}
   pauseMenu: {fileID: 0}
   WinMenu: {fileID: 0}
@@ -2606,7 +2610,6 @@ MonoBehaviour:
   Timer: {fileID: 0}
   winFlage: {fileID: 167080960}
   thereIsPause: 1
-  sceneFader: {fileID: 3356063603337590127}
 --- !u!1 &3356063603337590124
 GameObject:
   m_ObjectHideFlags: 0

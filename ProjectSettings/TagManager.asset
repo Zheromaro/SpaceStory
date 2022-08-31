@@ -6,14 +6,15 @@ TagManager:
   tags:
   - DropLoot
   - Wall
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -40,6 +41,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: FarBackGround
+    uniqueID: 2919447117
+    locked: 0
+  - name: BackGround
+    uniqueID: 2250442165
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

@@ -4,30 +4,55 @@ using UnityEngine;
 
 public class HealthEnemy : MonoBehaviour
 {
+    [SerializeField] private float thrust = 5;
     [SerializeField] private int damage = 40;
-    [SerializeField] private GameObject deathEffect;
     [SerializeField] private bool dontDie = false;
+    [SerializeField] private GameObject deathEffect;
 
     private ObjectPooler objectPooler;
     private Animator animator;
+    private Rigidbody2D rb;
     private bool isAlive;
+    private bool once = true;
+    private int startHealth;
 
-    public UnitStats _EnemyHealth = new UnitStats(1, 1);
+    public UnitHealth _EnemyHealth = new UnitHealth(1, 1);
 
     private void Start()
     {
         objectPooler = ObjectPooler.Instance;
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
         isAlive = true;
+
+        startHealth = _EnemyHealth.Health;
+    }
+
+    private void Update()
+    {
+        if (_EnemyHealth.Health < startHealth && once)
+        {
+            Vector2 difference = transform.position - GameManager.gameManager._PlayerHealth.Target.transform.position;
+            difference = difference.normalized * thrust;
+            rb.AddForce(difference, ForceMode2D.Impulse);
+            once = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        PlayerBehaviour health = hitInfo.GetComponent<PlayerBehaviour>();
-        if (health != null & isAlive)
+        if (hitInfo.CompareTag("Player") && isAlive)
         {
+            isAlive = false;
             GameManager.gameManager._PlayerHealth.DmgUnit(damage);
             _EnemyHealth.DmgUnit(damage);
+        }
+
+        if (_EnemyHealth.Health < startHealth)
+        {
+            Vector2 difference = transform.position - hitInfo.transform.position;
+            difference = difference.normalized * thrust;
+            rb.AddForce(difference, ForceMode2D.Impulse);
         }
 
         if (_EnemyHealth.Health <= 0 && dontDie == false)
@@ -49,7 +74,7 @@ public class HealthEnemy : MonoBehaviour
         Instantiate(deathEffect, transform.position, Quaternion.identity);
     }
 
-    public void TakeDamage (int damege)
+    public void TakeDamage(int damege)
     {
         _EnemyHealth.DmgUnit(damege);
     }

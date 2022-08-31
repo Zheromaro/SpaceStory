@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6860205811186286615}
   - component: {fileID: 6860205811186286616}
+  - component: {fileID: 3299951670377885614}
   - component: {fileID: 6860205811186286618}
   - component: {fileID: 6860205811186286614}
   - component: {fileID: 2016108177835094375}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: B Old Brick
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,6 +88,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &3299951670377885614
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860205811186286619}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!58 &6860205811186286618
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -115,11 +137,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a056a47561772548842c46f94daf430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10
+  thrust: 5
   damage: 20
-  drops: 2
-  deathEffect: {fileID: 8460667080445658512, guid: a3e2c3406e02f2c4ba86cfb1604277bd, type: 3}
   dontDie: 0
+  deathEffect: {fileID: 8460667080445658512, guid: a3e2c3406e02f2c4ba86cfb1604277bd, type: 3}
 --- !u!95 &2016108177835094375
 Animator:
   serializedVersion: 4

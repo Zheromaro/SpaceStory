@@ -2,15 +2,34 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager { get; private set; }
 
-    public UnitStats _PlayerHealth = new UnitStats(100, 100);
+    #region System & valus
+    [Header("SceneFader")]
+    [SerializeField] private SceneFader sceneFader;
 
-    #region UI && Win
+
+    [Header("Cameras")]
+    [HideInInspector] public CinemachineVirtualCamera virtualCamera;
+
+    [Header("SlowDown")]
+    [SerializeField] private float slowdownFactor = 0.05f;
+    [SerializeField] private float slowdownLength = 2f;
+
+    public bool waiting;
+    #endregion
+
+    #region Player
+    public UnitHealth _PlayerHealth = new UnitHealth(100, 100);
+    public UnitStamina _PlayerStamina = new UnitStamina(99f, 99f);
+    #endregion
+
+    #region UI
     [Header("Menus")]
     [SerializeField] private GameObject gameOverMenu;
     [SerializeField] private GameObject pauseMenu;
@@ -24,9 +43,6 @@ public class GameManager : MonoBehaviour
     [Header("Checkers")]
     [SerializeField] private checkWin winFlage;
     [SerializeField] private bool thereIsPause = true;
-
-    [Header("SceneFader")]
-    [SerializeField] private SceneFader sceneFader;
 
     bool gameIsPaused = false;
     #endregion
@@ -42,6 +58,7 @@ public class GameManager : MonoBehaviour
             gameManager = this;
         }
 
+        virtualCamera = transform.Find("Cameras").transform.Find("CM vcam").GetComponent<CinemachineVirtualCamera>();
     }
 
     void Update()
@@ -66,6 +83,12 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if (!waiting && !gameIsPaused)
+        {
+            Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
+            Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+        }
+
         if (winFlage.PlayerIsHere == true)
         {
             Win();
@@ -76,6 +99,23 @@ public class GameManager : MonoBehaviour
             GameOver();
         }
     }
+
+    #region publicSystems
+    public void DoSlowMotion()
+    {
+        Time.timeScale = slowdownFactor;
+        Time.fixedDeltaTime = Time.timeScale * 0.3f;
+    }
+
+    public void DoStopMotion(float duration)
+    {
+        if (waiting)
+            return;
+        Time.timeScale = 0.0f;
+        StartCoroutine(Wait(duration));
+    }
+
+    #endregion
 
     #region privateSystems
     private void Win()
@@ -94,6 +134,14 @@ public class GameManager : MonoBehaviour
             gameOverMenu.SetActive(true);
         }
 
+    }
+
+    IEnumerator Wait(float duration)
+    {
+        waiting = true;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1.0f;  
+        waiting = false;
     }
     #endregion
 

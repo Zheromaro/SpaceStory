@@ -40,8 +40,8 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_450D3E32: 6
-    - Vector1_BF7B720C: 6
-    - Vector1_E974001A: 0.6
+    - Vector1_BF7B720C: 1.35
+    - Vector1_E974001A: 50
     m_Colors:
     - Color_2ED9CBC6: {r: 0, g: 17.562975, b: 22.363522, a: 0}
   m_BuildTextureStacks: []

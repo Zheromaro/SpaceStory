@@ -10,13 +10,11 @@ public class itemFollow : MonoBehaviour
     [SerializeField] private bool stamina;
 
     Vector2 _velocity = Vector2.zero;
-    private GameObject player;
     private Transform target;
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        target = player.transform;
+        target = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void FixedUpdate()
@@ -30,13 +28,11 @@ public class itemFollow : MonoBehaviour
         {
             if (stamina == true)
             {
-                PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-                playerMovement.BackStamina();
+                GameManager.gameManager._PlayerStamina.RegenStamina(33f);
             }
 
             if (heal == true)
             {
-                PlayerBehaviour playerStats = player.GetComponent<PlayerBehaviour>();
                 GameManager.gameManager._PlayerHealth.HealUnit(20);
             }
             gameObject.SetActive(false);
