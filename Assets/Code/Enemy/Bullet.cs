@@ -21,16 +21,29 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        HealthEnemy enemy = hitInfo.GetComponent<HealthEnemy>();
+        IDamagable enemy = hitInfo.GetComponent<IDamagable>();
+        IDontDestroy dontDestroy = hitInfo.GetComponent<IDontDestroy>();
+
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
             gameObject.SetActive(false);
         }
 
-        if (hitInfo.CompareTag("Wall"))
+        if (dontDestroy == null)
         {
             gameObject.SetActive(false);
         }
     }
+
+    private void OnTriggerExit2D(Collider2D hitInfo)
+    {
+        IDontDestroy dontDestroy = hitInfo.GetComponent<IDontDestroy>();
+
+        if (dontDestroy == null)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
 }

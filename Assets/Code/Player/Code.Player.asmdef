@@ -2,11 +2,10 @@
     "name": "Code.Player",
     "rootNamespace": "",
     "references": [
-        "GUID:e8d6825a964f44d489fdd7d4afaf6003",
         "GUID:7b77ffd39eacaef4abc6461d0da0a2c8",
-        "GUID:851803ce5d5addb4f9997f6f718439e1",
         "GUID:eac1a46212961cf4e84a6140d278f760",
-        "GUID:4307f53044263cf4b835bd812fc161a4"
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:e8d6825a964f44d489fdd7d4afaf6003"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

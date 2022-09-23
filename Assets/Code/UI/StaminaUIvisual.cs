@@ -5,12 +5,16 @@ using UnityEngine.UI;
 
 public class StaminaUIvisual : MonoBehaviour
 {
+    [SerializeField] private float DisapearTime = 0.5f;
     private const float USED_STAMINA_SHRINK_TIMER_MAX = 1f;
 
     private Image staminaImage;
     private Image usedStaminaImage;
     private CanvasGroup canvasGroup;
     private float usedStaminaShrinkTimer;
+
+    private float stamina;
+    private float lerpSpeed;
 
     private void Awake()
     {
@@ -23,6 +27,7 @@ public class StaminaUIvisual : MonoBehaviour
     {
         usedStaminaImage.fillAmount = staminaImage.fillAmount;
         canvasGroup.alpha = 0f;
+        stamina = GameManager.gameManager._PlayerStamina.Stamina;
     }
 
     private void Update()
@@ -35,19 +40,38 @@ public class StaminaUIvisual : MonoBehaviour
                 usedStaminaImage.fillAmount -= 1f * Time.deltaTime;
             }
         }
+
+        lerpSpeed = 3f * Time.deltaTime;
+
+        UseAndBackStamina();
+
         StartCoroutine(FadeInOut());
     }
 
-    public void UseStamina(float StaminaNormalized)
+    private void UseAndBackStamina()
     {
-        staminaImage.fillAmount = StaminaNormalized;
+        if (stamina > GameManager.gameManager._PlayerStamina.Stamina)
+        {
+            UseStamina();
+            stamina = GameManager.gameManager._PlayerHealth.Health;
+        }
+        else if (stamina < GameManager.gameManager._PlayerStamina.Stamina)
+        {
+            StaminaBack();
+            stamina = GameManager.gameManager._PlayerHealth.Health;
+        }
+    }
+
+    public void UseStamina()
+    {
+        staminaImage.fillAmount = Mathf.Lerp(staminaImage.fillAmount, GetStaminaNormalized(), lerpSpeed); ;
         usedStaminaShrinkTimer = USED_STAMINA_SHRINK_TIMER_MAX;
 
     }
 
-    public void StaminaBack(float StaminaNormalized)
+    public void StaminaBack()
     {
-        staminaImage.fillAmount = StaminaNormalized;
+        staminaImage.fillAmount = Mathf.Lerp(staminaImage.fillAmount, GetStaminaNormalized(), lerpSpeed); ;
         usedStaminaImage.fillAmount = staminaImage.fillAmount;
     }
 
@@ -68,9 +92,10 @@ public class StaminaUIvisual : MonoBehaviour
 
         if (GameManager.gameManager._PlayerStamina.FadeOut == true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(DisapearTime);
             if (canvasGroup.alpha >= 0)
             {
+                usedStaminaImage.fillAmount = staminaImage.fillAmount;
                 canvasGroup.alpha -= 4f * Time.deltaTime;
                 if(canvasGroup.alpha == 0)
                 {
@@ -78,6 +103,11 @@ public class StaminaUIvisual : MonoBehaviour
                 }
             }
         }
+    }
+    
+    private float GetStaminaNormalized()
+    {
+        return (float)GameManager.gameManager._PlayerStamina.Stamina / GameManager.gameManager._PlayerStamina.MaxStamina;
     }
 
 }

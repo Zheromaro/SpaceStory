@@ -7,6 +7,7 @@ TagManager:
   - DropLoot
   - Wall
   - Enemy
+  - SpeedUp
   layers:
   - Default
   - TransparentFX

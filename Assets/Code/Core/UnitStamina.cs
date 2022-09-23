@@ -86,7 +86,6 @@ public class UnitStamina
         if (_currentStamina > 0)
         {
             _currentStamina -= staminaAmount * Time.deltaTime;
-            IsSprint = true;
             FadeIn = true;
             FadeOut = false;
         }
@@ -113,8 +112,6 @@ public class UnitStamina
         {
             _currentStamina = _currentMaxStamina;
         }
-
-        IsSprint = false;
         FadeIn = true;
         FadeOut = false;
     }

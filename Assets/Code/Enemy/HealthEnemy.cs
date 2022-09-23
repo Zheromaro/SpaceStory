@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthEnemy : MonoBehaviour
+public class HealthEnemy : MonoBehaviour , IDamagable
 {
     [SerializeField] private float thrust = 5;
     [SerializeField] private int damage = 40;
     [SerializeField] private bool dontDie = false;
+    [SerializeField] private bool doKnockBack = true;
     [SerializeField] private GameObject deathEffect;
 
     private ObjectPooler objectPooler;
@@ -30,7 +31,10 @@ public class HealthEnemy : MonoBehaviour
 
     private void Update()
     {
-        if (_EnemyHealth.Health < startHealth && once)
+        if (dontDie)
+            return;
+
+        if (_EnemyHealth.Health < startHealth && once && dontDie == false)
         {
             Vector2 difference = transform.position - GameManager.gameManager._PlayerHealth.Target.transform.position;
             difference = difference.normalized * thrust;
@@ -48,11 +52,17 @@ public class HealthEnemy : MonoBehaviour
             _EnemyHealth.DmgUnit(damage);
         }
 
+        if (dontDie)
+            return;
+
         if (_EnemyHealth.Health < startHealth)
         {
-            Vector2 difference = transform.position - hitInfo.transform.position;
-            difference = difference.normalized * thrust;
-            rb.AddForce(difference, ForceMode2D.Impulse);
+            if (doKnockBack == true)
+            {
+                Vector2 difference = transform.position - hitInfo.transform.position;
+                difference = difference.normalized * thrust;
+                rb.AddForce(difference, ForceMode2D.Impulse);
+            }
         }
 
         if (_EnemyHealth.Health <= 0 && dontDie == false)
@@ -61,6 +71,11 @@ public class HealthEnemy : MonoBehaviour
         }
 
     }
+
+    //private void OnBecameInvisible()
+    //{
+    //    Destroy(gameObject);
+    //}
 
     private IEnumerator Die()
     {

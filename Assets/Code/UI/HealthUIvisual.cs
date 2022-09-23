@@ -2,48 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class HealthUIvisual : MonoBehaviour
 {
-    private const float DAMAGED_HEALTH_SHRINK_TIMER_MAX = 1f;
-
-    private Image barImage;
-    private Image damagedBarImage;
-    private float damagedHealthShrinkTimer;
-
-    private void Awake()
-    {
-        barImage = transform.Find("HealthBar").GetComponent<Image>();
-        damagedBarImage = transform.Find("HealthBarDamage").GetComponent<Image>();
-    }
-    void Start()
-    {
-        barImage.fillAmount = 1f;
-        damagedBarImage.fillAmount = barImage.fillAmount;
-    }
+    [SerializeField] private Image[] healthPoints;
+    [SerializeField] private TextMeshProUGUI healthText;
 
     void Update()
     {
-        damagedHealthShrinkTimer -= Time.deltaTime;
-        if (damagedHealthShrinkTimer < 0)
+        healthText.text = "%" + GameManager.gameManager._PlayerHealth.Health;
+        HealthBarFillter();
+    }
+
+    public void HealthBarFillter()
+    {
+        for (int i = 0; i < healthPoints.Length; i++)
         {
-            if(barImage.fillAmount < damagedBarImage.fillAmount)
-            {
-                float shrinkSpeed = 1f;
-                damagedBarImage.fillAmount -= shrinkSpeed * Time.deltaTime;
-            }
+            healthPoints[i].enabled = !DisplayHealthPoint(GameManager.gameManager._PlayerHealth.Health, i);
         }
     }
 
-    public void Healed(float healAmount)
+    bool DisplayHealthPoint(float _health, int pointNumber)
     {
-        barImage.fillAmount = healAmount;
-        damagedBarImage.fillAmount = barImage.fillAmount;
-    }
-
-    public void Damaged(float damageAmount)
-    {
-        barImage.fillAmount = damageAmount;
-        damagedHealthShrinkTimer = DAMAGED_HEALTH_SHRINK_TIMER_MAX;
+        return ( (pointNumber * 10) >= _health );
     }
 }

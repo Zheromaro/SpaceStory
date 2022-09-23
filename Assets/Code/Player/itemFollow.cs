@@ -12,9 +12,9 @@ public class itemFollow : MonoBehaviour
     Vector2 _velocity = Vector2.zero;
     private Transform target;
 
-    private void Awake()
+    private void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        target = GameManager.gameManager._PlayerHealth.Target;
     }
 
     void FixedUpdate()
