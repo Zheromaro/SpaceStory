@@ -3,85 +3,84 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+namespace Core
 {
-    public static GameManager gameManager { get; private set; }
-
-    public UnitHealth _PlayerHealth = new UnitHealth(100, 100);
-    public UnitStamina _PlayerStamina = new UnitStamina(99f, 99f);
-
-    [HideInInspector] public bool waiting;
-    [HideInInspector] public CinemachineVirtualCamera virtualCamera;
-
-
-    [Header("CheckPoints Management")]
-    public Vector2 lastCheckPointPos;
-
-    [Header("SlowDown")]
-    [SerializeField] private float slowdownFactor = 0.05f;
-    [SerializeField] private float slowdownLength = 2f;
-
-
-    //--------------------------------------------------------------------
-
-    private void Awake()
+    public class GameManager : MonoBehaviour
     {
-        if (gameManager != null && gameManager != this)
+        public static GameManager gameManager { get; private set; }
+
+        public UnitHealth _PlayerHealth = new UnitHealth(100, 100);
+        public UnitStamina _PlayerStamina = new UnitStamina(99f, 99f);
+
+        [HideInInspector] public bool waiting;
+        [HideInInspector] public CinemachineVirtualCamera virtualCamera;
+
+        [Header("SlowDown")]
+        [SerializeField] private float slowdownFactor = 0.05f;
+        [SerializeField] private float slowdownLength = 2f;
+
+
+        //--------------------------------------------------------------------
+
+        private void Awake()
         {
-            Destroy(gameObject);
+            if (gameManager != null && gameManager != this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                gameManager = this;
+            }
+
+            //DontDestroyOnLoad(gameObject);
         }
-        else
+
+        private void Start()
         {
-            gameManager = this;
+            SceneManager.sceneLoaded += restart;
         }
 
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-        SceneManager.sceneLoaded += restart;
-    }
-
-    private void Update()
-    {
-        if (!waiting && !UIManager.gameIsPaused)
+        private void Update()
         {
-            Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
-            Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+            if (!waiting && !UIManager.gameIsPaused)
+            {
+                Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
+                Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+            }
         }
-    }
 
-    public void DoSlowMotion()
-    {
-        Time.timeScale = slowdownFactor;
-        Time.fixedDeltaTime = Time.timeScale * 0.35f;
-    }
+        public void DoSlowMotion()
+        {
+            Time.timeScale = slowdownFactor;
+            Time.fixedDeltaTime = Time.timeScale * 0.35f;
+        }
 
-    public void DoStopMotion(float duration)
-    {
-        if (waiting)
-            return;
-        Time.timeScale = 0.0f;
-        StartCoroutine(Wait(duration));
-    }
+        public void DoStopMotion(float duration)
+        {
+            if (waiting)
+                return;
+            Time.timeScale = 0.0f;
+            StartCoroutine(Wait(duration));
+        }
 
-    public void runCoroutine(IEnumerator cor)
-    {
-        StartCoroutine(cor);
-    }
+        public void runCoroutine(IEnumerator cor)
+        {
+            StartCoroutine(cor);
+        }
 
-    private IEnumerator Wait(float duration)
-    {
-        waiting = true;
-        yield return new WaitForSecondsRealtime(duration);
-        Time.timeScale = 1.0f;  
-        waiting = false;
-    }
+        private IEnumerator Wait(float duration)
+        {
+            waiting = true;
+            yield return new WaitForSecondsRealtime(duration);
+            Time.timeScale = 1.0f;
+            waiting = false;
+        }
 
-    private void restart(Scene scene, LoadSceneMode loadSceneMode)
-    {
-        _PlayerHealth.Health = 100;
-    }
+        private void restart(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            _PlayerHealth.Health = 100;
+        }
 
+    }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9151089898747279691}
   - component: {fileID: 9151089898747279694}
   - component: {fileID: 9151089898747279689}
-  - component: {fileID: 1078624497490360977}
+  - component: {fileID: -8806069813969070639}
   m_Layer: 0
   m_Name: Add+Speed
   m_TagString: Untagged
@@ -71,9 +71,9 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.746, y: 0.75}
+  m_Size: {x: 1.05, y: 1.05}
   m_EdgeRadius: 0
---- !u!50 &1078624497490360977
+--- !u!50 &-8806069813969070639
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

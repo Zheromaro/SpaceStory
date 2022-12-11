@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Core;
+using Player;
 
-public class EffectTheSpeed : MonoBehaviour , IDontDestroy
+public class EffectTheSpeed : MonoBehaviour //, IDontDestroy
 {
     [SerializeField] private float AddToSpeed;
     private static float AreInColision = 0;
+
+    private void Start()
+    {
+        Debug.Log("DontForgetMe");
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("Here");
             PlayerMovement.backToNormalSpeed = false;
             if (AreInColision < 1)
             {
@@ -26,7 +32,6 @@ public class EffectTheSpeed : MonoBehaviour , IDontDestroy
     {
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("notHere");
             AreInColision -= 1;
 
             if(AreInColision < 0)

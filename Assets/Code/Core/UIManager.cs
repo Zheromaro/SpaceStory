@@ -4,190 +4,149 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using TMPro;
 
-public class UIManager : MonoBehaviour
+namespace Core
 {
-    [HideInInspector] public static bool gameIsPaused = false;
-
-    [SerializeField] private GameObject panel;
-    [SerializeField] private AnimationCurve curve;
-
-    [Header("Menus")]
-    [SerializeField] private GameObject gameOverMenu;
-    [SerializeField] private GameObject pauseMenu;
-    [SerializeField] private GameObject WinMenu;
-
-    [Header("UI")]
-    [SerializeField] private TextMeshProUGUI endResult;
-    [SerializeField] private GameObject healthVisual;
-    [SerializeField] private GameObject Timer;
-
-    [Header("Checkers")]
-    [SerializeField] private bool thereIsPause = true;
-
-    private Image img;
-    private bool doneLoading = false;
-    
-    //--------------------------------------------------------------------------------
-    private void Start()
+    public class UIManager : MonoBehaviour
     {
-        img = panel.GetComponent<Image>();
-        StartCoroutine(FadeIn());
+        [HideInInspector] public static bool gameIsPaused = false;
 
-        SceneManager.sceneLoaded += FadeIn;
-    }
+        [Header("Fide")]
+        [SerializeField] private Animator animator;
+        [SerializeField] private int WaitFor;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) && thereIsPause)
+        [Header("Menus")]
+        [SerializeField] private GameObject gameOverMenu;
+        [SerializeField] private GameObject pauseMenu;
+        [SerializeField] private GameObject WinMenu;
+
+        [Header("UI")]
+        [SerializeField] private GameObject healthVisual;
+
+        [Header("Checkers")]
+        [SerializeField] private bool thereIsPause = true;
+
+        //--------------------------------------------------------------------------------
+        private void Start()
         {
-            if (gameIsPaused)
+            FadeIn();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) && thereIsPause)
             {
-                pauseMenu.SetActive(false);
-                healthVisual.SetActive(true);
-                Timer.SetActive(true);
-                Time.timeScale = 1f;
-                gameIsPaused = false;
+                if (gameIsPaused)
+                {
+                    pauseMenu.SetActive(false);
+
+                    healthVisual.SetActive(true);
+
+                    Time.timeScale = 1f;
+                    gameIsPaused = false;
+                }
+                else
+                {
+                    pauseMenu.SetActive(true);
+
+                    healthVisual.SetActive(false);
+
+                    Time.timeScale = 0f;
+                    gameIsPaused = true;
+                }
             }
-            else
+
+            if (GameManager.gameManager._PlayerHealth.Health == 0)
             {
-                pauseMenu.SetActive(true);
+                GameOver();
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Player"))
+            {
+                Win();
+            }
+        }
+
+        //--------------------------------------------------------------------------------
+        private void Win()
+        {
+            WinMenu.SetActive(true);
+        }
+
+        private void GameOver()
+        {
+            if (GameManager.gameManager._PlayerHealth.Health <= 0)
+            {
                 healthVisual.SetActive(false);
-                Timer.SetActive(false);
-                Time.timeScale = 0f;
-                gameIsPaused = true;
+                gameOverMenu.SetActive(true);
             }
+
         }
 
-        if (GameManager.gameManager._PlayerHealth.Health == 0)
+        #region Fade
+
+        private void FadeIn()
         {
-            GameOver();
+            pauseMenu.SetActive(false);
+            healthVisual.SetActive(true);
+            Time.timeScale = 1f;
+            gameIsPaused = false;
         }
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
+        private IEnumerator FadeOut(string scene)
         {
-            Win();
+            animator.SetTrigger("FadeOut");
+            GameManager.gameManager._PlayerHealth.Health = 100;
+            Time.timeScale = 1f;
+
+            yield return new WaitForSeconds(WaitFor);
+
+            SceneManager.LoadScene(scene);
         }
-    }
 
-    //--------------------------------------------------------------------------------
-    private void Win()
-    {
-        Countdown countdown = Timer.GetComponent<Countdown>();
-        countdown.timerActive = false;
-        endResult.text = countdown.textBox.text;
-        WinMenu.SetActive(true);
-    }
-
-    private void GameOver()
-    {
-        if (GameManager.gameManager._PlayerHealth.Health <= 0)
+        private IEnumerator FadeOut(int i)
         {
-            healthVisual.SetActive(false);
-            gameOverMenu.SetActive(true);
+            animator.SetTrigger("FadeOut");
+            GameManager.gameManager._PlayerHealth.Health = 100;
+            Time.timeScale = 1f;
+
+            yield return new WaitForSeconds(WaitFor);
+
+            SceneManager.LoadScene(i);
         }
 
-    }
+        #endregion
 
-    #region Fade
-    IEnumerator FadeOut(string scene)
-    {
-        panel.SetActive(true);
-        Time.timeScale = 1f;
-        float t = 0f;
+        #region Buttons Action
 
-        while (t < 1f)
+        public void Restart()
         {
-            t += Time.deltaTime;
-            float a = curve.Evaluate(t);
-            img.color = new Color(0, 0, 0, a);
-            yield return 0;
+            StartCoroutine(FadeOut(SceneManager.GetActiveScene().name));
         }
 
-        SceneManager.LoadScene(scene);
-    }
-    IEnumerator FadeOut(int i)
-    {
-        panel.SetActive(true);
-        Time.timeScale = 1f;
-        float t = 0f;
-
-        while (t < 1f)
+        public void NextLevel()
         {
-            t += Time.deltaTime;
-            float a = curve.Evaluate(t);
-            img.color = new Color(0, 0, 0, a);
-            yield return 0;
+            StartCoroutine(FadeOut(SceneManager.GetActiveScene().buildIndex + 1));
         }
 
-        SceneManager.LoadScene(i);
-    }
-    IEnumerator FadeIn()
-    {
-        pauseMenu.SetActive(false);
-        healthVisual.SetActive(true);
-        Timer.SetActive(true);
-        Time.timeScale = 1f;
-        gameIsPaused = false;
-
-        panel.SetActive(true);
-        float t = 1f;
-
-        while (t > 0f)
+        public void Select(int i)
         {
-            t -= Time.deltaTime;
-            float a = curve.Evaluate(t);
-            img.color = new Color(0, 0, 0, a);
-            yield return null;
+            StartCoroutine(FadeOut("Level " + i));
         }
 
-        panel.SetActive(false);
-    }
-    private void FadeIn(Scene scene, LoadSceneMode loadSceneMode)
-    {
-        StartCoroutine(FadeIn());
-
-        GameManager.gameManager._PlayerHealth.Health = 100;
-    }
-    #endregion
-
-    #region Buttons Action
-
-    public void Restart()
-    {
-        StartCoroutine(FadeOut(SceneManager.GetActiveScene().name));
-
-        if(doneLoading)
-        { 
-            StartCoroutine(FadeIn());
+        public void BackToMainMenu()
+        {
+            StartCoroutine(FadeOut("Menu"));
         }
-    }
 
-    public void NextLevel()
-    {
-        GameManager.gameManager.lastCheckPointPos = Vector2.zero;
-        StartCoroutine(FadeOut(SceneManager.GetActiveScene().buildIndex + 1));
-    }
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
 
-    public void Select(int i)
-    {
-        GameManager.gameManager.lastCheckPointPos = Vector2.zero;
-        StartCoroutine(FadeOut("Level " + i));
-    }
+        #endregion
 
-    public void BackToMainMenu()
-    {
-        GameManager.gameManager.lastCheckPointPos = Vector2.zero;
-        StartCoroutine(FadeOut("Menu"));
     }
-
-    public void QuitGame()
-    {
-        GameManager.gameManager.lastCheckPointPos = Vector2.zero;
-        Application.Quit();
-    }
-
-    #endregion
 }

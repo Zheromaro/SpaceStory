@@ -3,33 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAbilitys : MonoBehaviour
+namespace Player
 {
-    [SerializeField] private Ability[] abilites;
-    [HideInInspector] public bool inSpeedUp = false;
+    using Abilites;
 
-    void Update()
+    public class PlayerAbilitys : MonoBehaviour
     {
-        foreach (var ability in abilites)
-        {
-            ability.DoAbility(gameObject);
-        }
-    }
+        [SerializeField] private Ability[] abilites;
+        [HideInInspector] public bool inSpeedUp = false;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("SpeedUp"))
+        void Update()
         {
-            inSpeedUp = true;
+            foreach (var ability in abilites)
+            {
+                ability.DoAbility(gameObject);
+            }
         }
-    }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("SpeedUp"))
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            inSpeedUp = false;
+            if (collision.CompareTag("SpeedUp"))
+            {
+                inSpeedUp = true;
+            }
         }
-    }
 
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (collision.CompareTag("SpeedUp"))
+            {
+                inSpeedUp = false;
+            }
+        }
+
+    }
 }
