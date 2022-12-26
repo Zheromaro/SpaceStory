@@ -1,13 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Core;
+using UnityEngine.InputSystem;
+using SpaceGame.Core;
+using SpaceGame.Core.SaveSystem;
 
-namespace Player
+namespace SpaceGame.Player
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : MonoBehaviour, IDataPersistence
     {
+        private InputAction Input_Move;
+
         [SerializeField] private ParticleSystem dust;
         private Rigidbody2D rb;
         private Animator animator;
@@ -22,9 +23,8 @@ namespace Player
         private float x;
         private float y;
 
-
         [Space(8)]
-        public float speed = 1.2f;
+        public float speed;
         public static float theTrueSpeed;
         public static bool backToNormalSpeed = true;
         [SerializeField] private float plusAmount;
@@ -33,14 +33,8 @@ namespace Player
         [Space(8)]
         [SerializeField] private float thrust = 5;
 
-        [Space(8)]
-        [Header("ForCamera")]
-        [SerializeField] private float cameraInSprint;
-        [SerializeField] private float cameraInSlow;
-
         //------------------------------------------------------------------
 
-        #region inStart
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -49,30 +43,43 @@ namespace Player
 
         private void Start()
         {
-            startHealth = GameManager.gameManager._PlayerHealth.Health;
             theTrueSpeed = speed;
         }
-        #endregion
+
+        private void OnEnable()
+        {
+            Input_Move = InputManager.inputActions.Player.Movement;
+        }
+
+        public void LoadData(GameData data)
+        {
+            this.transform.position = data.playerPosition;
+        }
+
+        public void SaveData(GameData data)
+        {
+            // Nothing...
+        }
 
         private void Update()
         {
             if (freeHorizontalMovement)
             {
-                movement.x = Input.GetAxisRaw("Horizontal");
+                movement.x = Input_Move.ReadValue<Vector2>().x;
             }
             else
             {
-                x = Input.GetAxisRaw("Horizontal") * plusAmount;
+                x = Input_Move.ReadValue<Vector2>().x * plusAmount;
                 movement.x = Manual + x;
             }
 
             if (freeVerticalMovement)
             {
-                movement.y = Input.GetAxisRaw("Vertical");
+                movement.y = Input_Move.ReadValue<Vector2>().y;
             }
             else
             {
-                y = Input.GetAxisRaw("Horizontal") * minusAmount;
+                y = Input_Move.ReadValue<Vector2>().y * minusAmount;
                 movement.y = Manual + y;
             }
 
@@ -82,6 +89,18 @@ namespace Player
 
             ManageSpeed();
 
+        }
+
+        private void ManageSpeed()
+        {
+            if (theTrueSpeed != speed && backToNormalSpeed == true)
+            {
+                theTrueSpeed = speed;
+            }
+            else if (theTrueSpeed > speed)
+            {
+                GameManager.gameManager._PlayerStamina.IsSprint = true;
+            }
         }
 
         private void FixedUpdate()
@@ -107,18 +126,5 @@ namespace Player
                 }
             }
         }
-
-        private void ManageSpeed()
-        {
-            if (theTrueSpeed != speed && backToNormalSpeed == true)
-            {
-                theTrueSpeed = speed;
-            }
-            else if (theTrueSpeed > speed)
-            {
-                GameManager.gameManager._PlayerStamina.IsSprint = true;
-            }
-        }
     }
-
 }

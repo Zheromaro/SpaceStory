@@ -1,50 +1,46 @@
 using System.Collections;
 using UnityEngine;
-using Core;
+using SpaceGame.Core;
+using SpaceGame.Core.GameEvent;
 
-namespace Player
+namespace SpaceGame.Player
 {
     public class PlayerBehaviour : MonoBehaviour
     {
+        [SerializeField] private VoidEvent onCharacterDied;
+        [SerializeField] private VoidEvent onCharacterHealed;
+        [SerializeField] private VoidEvent onCharacterDamaged;
+
         private float health;
 
         private void Start()
         {
-            GameManager.gameManager._PlayerHealth.Target = transform;
             health = GameManager.gameManager._PlayerHealth.Health;
         }
 
         private void Update()
         {
-            EffectsForHealth();
+            CheckingForHealth();
         }
 
-        private void EffectsForHealth()
+        private void CheckingForHealth()
         {
             if (health > GameManager.gameManager._PlayerHealth.Health)
             {
-                GameManager.gameManager.DoStopMotion(0.1f);
-                StartCoroutine(WaitForTimeToBack());
                 health = GameManager.gameManager._PlayerHealth.Health;
+                onCharacterHealed.Raise();
             }
             else if (health < GameManager.gameManager._PlayerHealth.Health)
             {
                 health = GameManager.gameManager._PlayerHealth.Health;
+                onCharacterDamaged.Raise();
             }
 
             if (GameManager.gameManager._PlayerHealth.Health <= 0)
             {
+                onCharacterDied.Raise();
                 gameObject.SetActive(false);
             }
         }
-
-        private IEnumerator WaitForTimeToBack()
-        {
-            while (GameManager.gameManager.waiting == true)
-                yield return null;
-
-            GameManager.gameManager.DoSlowMotion();
-        }
-
     }
 }

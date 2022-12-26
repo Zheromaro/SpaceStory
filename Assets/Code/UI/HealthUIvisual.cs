@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Core;
+using SpaceGame.Core;
 
-namespace UI
+namespace SpaceGame.UI
 {
     public class HealthUIvisual : MonoBehaviour
     {

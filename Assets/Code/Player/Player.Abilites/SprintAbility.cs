@@ -1,29 +1,32 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using SpaceGame.Core;
 
-namespace Player.Abilites
+namespace SpaceGame.Player.Abilites
 {
-    [CreateAssetMenu(fileName = "New Ability", menuName = "Abilites/Sprint")]
     public class SprintAbility : Ability
     {
-        [SerializeField] private float AddToSpeed;
-        private bool once = false;
+        private InputAction Input_Sprint;
 
-        public override void Activate(GameObject parent)
+        [SerializeField] private float AddToSpeed;
+
+        private void OnEnable()
         {
-            Debug.Log("Start");
-            PlayerMovement.backToNormalSpeed = false;
-            if (once == false)
-            {
-                PlayerMovement.theTrueSpeed += AddToSpeed;
-                once = true;
-            }
+            Input_Sprint = InputManager.inputActions.Player.Move_Sprint;
+
+            Input_Sprint.performed += Cast;
+            Input_Sprint.canceled += Disactivate;
         }
 
-        public override void Disactivate(GameObject parent)
+        public override void Cast(InputAction.CallbackContext obj)
         {
-            Debug.Log("End");
+            PlayerMovement.backToNormalSpeed = false;
+            PlayerMovement.theTrueSpeed += AddToSpeed;
+        }
+
+        public void Disactivate(InputAction.CallbackContext obj)
+        {
             PlayerMovement.backToNormalSpeed = true;
         }
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Logic
+namespace SpaceGame.Enemy.Logic
 {
     public class EnemyMove : MonoBehaviour
     {
@@ -17,7 +17,7 @@ namespace Enemy.Logic
         [SerializeField] private float moveSpeed = 5;
 
         private Rigidbody2D rb;
-        private HealthEnemy healthEnemy;
+        private EnemyHealth healthEnemy;
 
         bool Move;
 
@@ -25,7 +25,7 @@ namespace Enemy.Logic
 
         private void Start()
         {
-            healthEnemy = GetComponent<HealthEnemy>();
+            healthEnemy = GetComponent<EnemyHealth>();
             rb = GetComponent<Rigidbody2D>();
             startPos = transform.position;
             Move = true;

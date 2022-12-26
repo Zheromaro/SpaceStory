@@ -1,32 +1,45 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Core;
-using Enemy;
+using UnityEngine.InputSystem;
+using SpaceGame.Core;
+using SpaceGame.Enemy;
 
-namespace Player.Abilites
+namespace SpaceGame.Player.Abilites
 {
-    [CreateAssetMenu(fileName = "New Ability", menuName = "Abilites/Wave")]
     public class WaveAbility : Ability
     {
+        private InputAction Input_Flip;
+
         [SerializeField] private float attackRange;
         [SerializeField] private int waveAttackDamege = 20;
         [SerializeField] private LayerMask enemyLayer;
         private Animator waveAnimator;
         private Transform player;
 
-        public override void Activate(GameObject parent)
+        private void Awake()
         {
-            waveAnimator = parent.transform.Find("Fire").GetComponent<Animator>();
-            player = parent.transform;
+            GameObject fire = GameObject.Find("Fire");
+            waveAnimator = fire.GetComponent<Animator>();
+            player = GetComponent<Transform>();
+        }
+
+        private void OnEnable()
+        {
+            Input_Flip = InputManager.inputActions.Player.Attack_Wave;
+
+            Input_Flip.performed += Cast;
+        }
+
+        public override void Cast(InputAction.CallbackContext obj)
+        {
 
             if (GameManager.gameManager._PlayerStamina.Stamina > 0 && waveAnimator.GetBool("Do waveAttack") == false)
             {
-                GameManager.gameManager.runCoroutine(WaveAttack());
+                StartCoroutine(Flip());
             }
         }
 
-        private IEnumerator WaveAttack()
+        private IEnumerator Flip()
         {
             GameManager.gameManager._PlayerHealth.InDefence = true;
             waveAnimator.SetBool("Do waveAttack", true);
@@ -35,7 +48,7 @@ namespace Player.Abilites
 
             foreach (Collider2D enemy in hitEnemies)
             {
-                enemy.GetComponent<HealthEnemy>().TakeDamage(waveAttackDamege);
+                enemy.GetComponent<EnemyHealth>().TakeDamage(waveAttackDamege);
             }
 
             yield return new WaitForSeconds(1f);

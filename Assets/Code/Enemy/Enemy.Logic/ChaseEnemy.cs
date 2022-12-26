@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Logic
+namespace SpaceGame.Enemy.Logic
 {
     public class ChaseEnemy : MonoBehaviour
     {

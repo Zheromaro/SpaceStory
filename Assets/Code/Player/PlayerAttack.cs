@@ -1,59 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using SpaceGame.Core;
+using SpaceGame.Core.ObjectPooling;
 
-namespace Player
+namespace SpaceGame.Player
 {
     public class PlayerAttack : MonoBehaviour
     {
-        [SerializeField] private Animator ShootingAnim;
-        [SerializeField] private Transform firePosition;
-        [SerializeField] private KeyCode key;
-        [SerializeField] private float fireRate;
-        [SerializeField] private float DisappearRate;
+        private InputAction Input_Shoot;
+        private InputAction Input_ChangShootingPos;
 
-        private float fireTime = 0f;
-        private float DisappearTime = 0f;
+        [Header("For Spawning")]
+        public static ObjectPool<PoolObject> objectPool;
+        [SerializeField] private GameObject objectPrefab;
+        [SerializeField] private int preSpawn;
+
+        [Header ("For Firing")]
+        [SerializeField] private Animator ShootingAnim;
+        [SerializeField] private Transform firePoint;
+
         private PlayerMovement playerMovement;
 
-        void Start()
+        private void Awake()
         {
             playerMovement = GetComponent<PlayerMovement>();
+
+            //create pool instance with prefab reference and pull and push actions
+            objectPool = new ObjectPool<PoolObject>(objectPrefab, CallOnPull, CallOnPull, preSpawn);
+        }
+
+        private void CallOnPull(PoolObject poolObject)
+        {
+            ShootingAnim.SetBool("IsShooting", true);
+        }
+
+        private void CallOnPuch(PoolObject poolObject)
+        {
+            // Nothing yet
+        }
+
+        private void OnEnable()
+        {
+            Input_Shoot = InputManager.inputActions.Player.Attack_Shoot;
+            Input_ChangShootingPos = InputManager.inputActions.Player.Attack_Shoot_ChangPos;
+
+            Input_Shoot.performed += Shoot;
+            Input_ChangShootingPos.performed += ChangePos;
+        }
+
+        private void ChangePos(InputAction.CallbackContext obj)
+        {
+            ShootingAnim.SetBool("Switch", !ShootingAnim.GetBool("Switch"));
+        }
+
+        private void Shoot(InputAction.CallbackContext obj)
+        {
+            objectPool.Pull(firePoint.position, firePoint.rotation);
         }
 
         void Update()
         {
-            DisappearTime += Time.deltaTime * DisappearRate;
-
             ShootingAnim.SetFloat("Horizontal", playerMovement.movement.x);
             ShootingAnim.SetFloat("Vertical", playerMovement.movement.y);
-
-            if (Input.GetKeyDown(key))
-            {
-                ShootingAnim.SetBool("Switch", !ShootingAnim.GetBool("Switch"));
-            }
-
-            fireTime += Time.deltaTime;
-            if (Input.GetButtonDown("Fire1") && fireTime > fireRate)
-            {
-                fireTime = 0f;
-                Shoot();
-            }
-
-            if (ShootingAnim.GetBool("Do waveAttack") == true)
-            {
-                DisappearTime = 0f;
-            }
-
-            ShootingAnim.SetFloat("Not Moving for", DisappearTime);
         }
 
-        private void Shoot()
-        {
-            DisappearTime = 0f;
-
-            ShootingAnim.SetBool("IsShooting", true);
-            //objectPooler.SpawnFromPool("bullet", firePosition.position, firePosition.rotation);
-        }
     }
 }

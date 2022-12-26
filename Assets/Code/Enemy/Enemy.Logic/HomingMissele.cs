@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Logic
+namespace SpaceGame.Enemy.Logic
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class HomingMissele : MonoBehaviour

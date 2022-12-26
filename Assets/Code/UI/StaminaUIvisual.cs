@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Core;
+using SpaceGame.Core;
 
-namespace UI
+namespace SpaceGame.UI
 {
     public class StaminaUIvisual : MonoBehaviour
     {

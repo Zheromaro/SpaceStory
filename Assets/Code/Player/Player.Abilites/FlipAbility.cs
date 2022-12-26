@@ -1,18 +1,32 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using SpaceGame.Core;
 
-namespace Player.Abilites
+namespace SpaceGame.Player.Abilites
 {
-    [CreateAssetMenu(fileName = "New Ability", menuName = "Abilites/Flip")]
     public class FlipAbility : Ability
     {
-        public override void Activate(GameObject parent)
+        private InputAction Input_Flip;
+
+        private PlayerMovement player;
+
+        private void Awake()
         {
-            PlayerMovement player = parent.GetComponent<PlayerMovement>();
-            player.Manual = player.Manual * -1f;
+            player = GetComponent<PlayerMovement>();
         }
 
+        private void OnEnable()
+        {
+            Input_Flip = InputManager.inputActions.Player.Move_Flip;
+
+            Input_Flip.performed += Cast;
+        }
+
+        public override void Cast(InputAction.CallbackContext obj)
+        {
+            player.Manual = player.Manual * -1f;
+        }
 
     }
 }

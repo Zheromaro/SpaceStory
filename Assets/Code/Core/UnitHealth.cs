@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core
+namespace SpaceGame.Core
 {
     public class UnitHealth
     {
@@ -10,7 +10,6 @@ namespace Core
         int _currentHealth;
         int _currentMaxHealth;
         bool _inDefence;
-        Transform _target;
 
         // Properties
         public int Health
@@ -46,18 +45,6 @@ namespace Core
             set
             {
                 _inDefence = value;
-            }
-        }
-
-        public Transform Target
-        {
-            get
-            {
-                return _target;
-            }
-            set
-            {
-                _target = value;
             }
         }
 
