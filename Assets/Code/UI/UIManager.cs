@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using SpaceGame.Core;
 
 namespace SpaceGame.UI
@@ -8,10 +9,7 @@ namespace SpaceGame.UI
     {
         private InputAction pause;
         private InputAction resume;
-
-        [Header("Fide")]
-        [SerializeField] private Animator animator;
-        [SerializeField] private int WaitFor;
+        bool gameIsPaused = false;
 
         [Header("Menus")]
         [SerializeField] private GameObject gameOverMenu;
@@ -22,40 +20,63 @@ namespace SpaceGame.UI
         [SerializeField] private GameObject healthVisual;
 
         //--------------------------------------------------------------------------------
-
         private void OnEnable()
         {
             pause = InputManager.inputActions.Player.UI_Pause;
             resume = InputManager.inputActions.UI.UI_Resume;
 
-            pause.performed += Pause;
-            resume.performed += Resume;
+            pause.performed += onInput;
+            resume.performed += onInput;
+            SceneManager.sceneLoaded += onLoaded;
         }
 
         private void OnDisable()
         {
-            pause.performed -= Pause;
-            resume.performed -= Resume;
+            pause.performed -= onInput;
+            resume.performed -= onInput;
+            SceneManager.sceneLoaded -= onLoaded;
+        }
+
+        private void onLoaded(Scene scene, LoadSceneMode arg1)
+        {
+            if (scene.name == "Menu") { return; }
+            Resume();
+        }
+
+        private void onInput(InputAction.CallbackContext obj)
+        {
+            if (gameIsPaused == false)
+            {
+                Pause();
+            }
+            else
+            {
+                Resume();
+            }
+
         }
 
         //--------------------------------------------------------------------------------
 
-        private void Pause(InputAction.CallbackContext obj)
+        private void Pause()
         {
             pauseMenu.SetActive(true);
             healthVisual.SetActive(false);
 
             InputManager.ToggeleActionMap(InputManager.inputActions.UI);
             Time.timeScale = 0f;
+            gameIsPaused = true;
         }
 
-        private void Resume(InputAction.CallbackContext obj)
+        private void Resume()
         {
             pauseMenu.SetActive(false);
             healthVisual.SetActive(true);
 
+
             InputManager.ToggeleActionMap(InputManager.inputActions.Player);
             Time.timeScale = 1f;
+            gameIsPaused = false;
         }
 
         public void GameOver()
@@ -68,6 +89,5 @@ namespace SpaceGame.UI
         {
             WinMenu.SetActive(true);
         }
-
     }
 }

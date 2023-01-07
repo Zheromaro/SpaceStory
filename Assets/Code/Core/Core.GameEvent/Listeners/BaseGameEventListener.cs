@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace SpaceGame.Core.GameEvent
 {
-    public abstract class BaseGameEventListener<T, E, UER> : MonoBehaviour,
+    public abstract class BaseGameEventListener<T, E, UER> :
         IGameEventListener<T> where E : BaseGameEvent<T> where UER : UnityEvent<T>
     {
         [SerializeField] private E gameEvent;
@@ -12,14 +12,14 @@ namespace SpaceGame.Core.GameEvent
 
         [SerializeField] private UER unityEventResponse;
 
-        private void OnEnable()
+        public void OnEnable()
         {
             if (gameEvent == null) { return; }
 
             GameEvent.RegisterListener(this);
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             if (gameEvent == null) { return; }
 

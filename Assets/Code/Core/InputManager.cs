@@ -25,6 +25,28 @@ namespace SpaceGame.Core
             }
         }
 
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += onLoaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= onLoaded;
+        }
+
+        private void onLoaded(Scene scene, LoadSceneMode arg1)
+        {
+            if(scene.name == "Menu")
+            {
+                ToggeleActionMap(inputActions.UI);
+            }
+            else
+            {
+                ToggeleActionMap(inputActions.Player);
+            }
+        }
+
         public static void ToggeleActionMap(InputActionMap actionMap)
         {
             if (actionMap.enabled)

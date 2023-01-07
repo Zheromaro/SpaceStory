@@ -13,9 +13,20 @@ namespace SpaceGame.UI
         [SerializeField] private Animator animator;
         [SerializeField] private int WaitFor;
 
-        public void FadeIn()
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += FadeIn;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= FadeIn;
+        }
+
+        public void FadeIn(Scene scene, LoadSceneMode mode)
         {
             Time.timeScale = 1f;
+            animator.Play("Fade_In");
         }
 
         public void FadeOut(string scene)
@@ -30,7 +41,7 @@ namespace SpaceGame.UI
 
         private IEnumerator FadeOutMangement(string scene)
         {
-            animator.SetTrigger("FadeOut");
+            animator.Play("Fade_Out");
             DataPersistatenceManager.dataPersistatence.SaveGame();
 
             yield return new WaitForSeconds(1);
@@ -45,7 +56,7 @@ namespace SpaceGame.UI
 
         private IEnumerator FadeOutMangement(int i)
         {
-            animator.SetTrigger("FadeOut");
+            animator.Play("Fade_Out");
             DataPersistatenceManager.dataPersistatence.SaveGame();
 
             yield return new WaitForSeconds(1);

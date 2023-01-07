@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using SpaceGame.Core;
-using SpaceGame.Random;
+using SpaceGame.NotImportant;
 
 namespace SpaceGame.Enemy
 {

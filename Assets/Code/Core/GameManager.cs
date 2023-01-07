@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using SpaceGame.Core.GameEvent;
 
 namespace SpaceGame.Core
 {
@@ -10,6 +11,8 @@ namespace SpaceGame.Core
 
         public UnitHealth _PlayerHealth = new UnitHealth(100, 100);
         public UnitStamina _PlayerStamina = new UnitStamina(99f, 99f);
+
+        [SerializeField] private VoidEvent onStaminaChanged;
 
         private void Awake()
         {
@@ -25,6 +28,7 @@ namespace SpaceGame.Core
 
         private void OnEnable()
         {
+            _PlayerStamina.onStaminaChanged = onStaminaChanged;
             SceneManager.sceneLoaded += restart;
         }
 
@@ -37,11 +41,5 @@ namespace SpaceGame.Core
         {
             _PlayerHealth.Health = 100;
         }
-
-        public void runCoroutine(IEnumerator cor)
-        {
-            StartCoroutine(cor);
-        }
-
     }
 }

@@ -12,9 +12,12 @@ namespace SpaceGame.UI
 
         private void Start()
         {
+            DataPersistatenceManager.dataPersistatence.LoadGame();
+
+            
             for (int i = 0; i < levelButtons.Length; i++)
             {
-                if(i + 1 > LevelReached)
+                if (i > LevelReached)
                     levelButtons[i].interactable = false;
             }
         }

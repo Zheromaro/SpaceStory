@@ -1,6 +1,29 @@
-using UnityEngine.Events;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace SpaceGame.Core.GameEvent
 {
-    public class VoidListener : BaseGameEventListener<Void, VoidEvent, UnityVoidEvent> { }
+    public class VoidListener : MonoBehaviour
+    {
+        [System.Serializable]
+        class VoidListeners : BaseGameEventListener<Void, VoidEvent, UnityVoidEvent> {}
+
+        [SerializeField] private VoidListeners[] voidListeners;
+
+        private void OnEnable()
+        {
+            foreach (var listener in voidListeners)
+            {
+                listener.OnEnable();
+            }
+        }
+
+        private void OnDisable()
+        {
+            foreach (var listener in voidListeners)
+            {
+                listener.OnDisable();
+            }
+        }
+    }
 }

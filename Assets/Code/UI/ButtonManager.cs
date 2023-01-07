@@ -26,36 +26,26 @@ namespace SpaceGame.UI
             }
 
             sceneFader = GetComponent<SceneFader>();
-            sceneFader.FadeIn();
-        }
-
-        public void Restart()
-        {
-            InputManager.ToggeleActionMap(InputManager.inputActions.Player);
-
-            sceneFader.FadeOut(SceneManager.GetActiveScene().name);
         }
 
         public void NextLevel()
         {
-            InputManager.ToggeleActionMap(InputManager.inputActions.Player);
+            Time.timeScale = 1f;
 
             DisableButtons();
             sceneFader.FadeOut(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
-        public void Select(int i)
+        public void Restart()
         {
-            InputManager.ToggeleActionMap(InputManager.inputActions.Player);
+            Time.timeScale = 1f;
 
-            DisableButtons();
-            OutMenu();
-            sceneFader.FadeOut("Level " + i);
+            sceneFader.FadeOut(SceneManager.GetActiveScene().name);
         }
 
         public void BackToMainMenu()
         {
-            InputManager.ToggeleActionMap(InputManager.inputActions.UI);
+            Time.timeScale = 1f;
 
             DisableButtons();
             sceneFader.FadeOut("Menu");
@@ -63,16 +53,22 @@ namespace SpaceGame.UI
 
         public void NewGame()
         {
-            InputManager.ToggeleActionMap(InputManager.inputActions.Player);
-
             DisableButtons();
+            OutMenu();
 
             // create a new game - which will initialize our game data
             DataPersistatenceManager.dataPersistatence.NewGame();
 
             // Load the gameplay scene - which will in turn save the game because of
             // OnSceneUnloaded() in the DataPersistatenceManager
-            SceneManager.LoadSceneAsync("Level 1");
+            sceneFader.FadeOut("Level 1");
+        }
+
+        public void Select(int i)
+        {
+            DisableButtons();
+            OutMenu();
+            sceneFader.FadeOut("Level " + i);
         }
 
         public void QuitGame()
@@ -80,6 +76,8 @@ namespace SpaceGame.UI
             DisableButtons();
             Application.Quit();
         }
+
+        #region just for some help
 
         private void DisableButtons()
         {
@@ -93,5 +91,6 @@ namespace SpaceGame.UI
             pauseMenu.SetActive(false);
             healthVisual.SetActive(true);
         }
+        #endregion
     }
 }

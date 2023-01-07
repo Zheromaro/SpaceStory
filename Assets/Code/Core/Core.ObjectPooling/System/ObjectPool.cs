@@ -20,6 +20,7 @@ namespace SpaceGame.Core.ObjectPooling
             prefab = pooledObject;
             this.puchObject = puchObject;
             this.pullObject = pullObject;
+            Spawn(numToSpawn);
         }
 
         public ObjectPool(GameObject pooledObject, int numToSpawn = 0)

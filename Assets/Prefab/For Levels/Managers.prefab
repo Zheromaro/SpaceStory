@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34bcd4642df87ba4285cd3ba21d10adf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initializeDataIfNull: 0
   fileName: data.game
   useEncryption: 1
 --- !u!1 &4049517099145421574
@@ -482,8 +483,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5099374474482729695}
-        m_TargetAssemblyTypeName: UIManager, Code.Extra
+      - m_Target: {fileID: 5716072988452532843}
+        m_TargetAssemblyTypeName: SpaceGame.UI.ButtonManager, Assembly-CSharp
         m_MethodName: BackToMainMenu
         m_Mode: 1
         m_Arguments:
@@ -692,8 +693,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5099374474482729695}
-        m_TargetAssemblyTypeName: UIManager, Code.Extra
+      - m_Target: {fileID: 5716072988452532843}
+        m_TargetAssemblyTypeName: SpaceGame.UI.ButtonManager, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
@@ -1800,8 +1801,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5099374474482729695}
-        m_TargetAssemblyTypeName: UIManager, Code.Extra
+      - m_Target: {fileID: 5716072988452532843}
+        m_TargetAssemblyTypeName: SpaceGame.UI.ButtonManager, Assembly-CSharp
         m_MethodName: NextLevel
         m_Mode: 1
         m_Arguments:
@@ -2633,8 +2634,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5099374474482729695}
-        m_TargetAssemblyTypeName: UIManager, Code.Extra
+      - m_Target: {fileID: 5716072988452532843}
+        m_TargetAssemblyTypeName: SpaceGame.UI.ButtonManager, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
@@ -2767,8 +2768,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5099374474482729695}
-        m_TargetAssemblyTypeName: UIManager, Code.Extra
+      - m_Target: {fileID: 5716072988452532843}
+        m_TargetAssemblyTypeName: SpaceGame.UI.ButtonManager, Assembly-CSharp
         m_MethodName: BackToMainMenu
         m_Mode: 1
         m_Arguments:
@@ -3036,8 +3037,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5099374474482729695}
-        m_TargetAssemblyTypeName: UIManager, Code.Extra
+      - m_Target: {fileID: 5716072988452532843}
+        m_TargetAssemblyTypeName: SpaceGame.UI.ButtonManager, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
@@ -3218,8 +3219,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5099374474482729695}
-        m_TargetAssemblyTypeName: UIManager, Code.Extra
+      - m_Target: {fileID: 5716072988452532843}
+        m_TargetAssemblyTypeName: SpaceGame.UI.ButtonManager, Assembly-CSharp
         m_MethodName: BackToMainMenu
         m_Mode: 1
         m_Arguments:
@@ -3842,7 +3843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.03137255, g: 0.078431375, b: 0.11764707, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -1,15 +1,16 @@
 using UnityEngine;
+using SpaceGame.Core.GameEvent;
 
 namespace SpaceGame.Core
 {
     public class UnitStamina
     {
+        // Event
+        public VoidEvent onStaminaChanged;
+
         // Fields
         float _currentStamina;
         float _currentMaxStamina;
-        bool _isSprint;
-        bool _fadeOut;
-        bool _fadeIn;
 
         // Properties
         public float Stamina
@@ -36,42 +37,6 @@ namespace SpaceGame.Core
             }
         }
 
-        public bool IsSprint
-        {
-            get
-            {
-                return _isSprint;
-            }
-            set
-            {
-                _isSprint = value;
-            }
-        }
-
-        public bool FadeOut
-        {
-            get
-            {
-                return _fadeOut;
-            }
-            set
-            {
-                _fadeOut = value;
-            }
-        }
-
-        public bool FadeIn
-        {
-            get
-            {
-                return _fadeIn;
-            }
-            set
-            {
-                _fadeIn = value;
-            }
-        }
-
 
         // Constructor
         public UnitStamina(float stamina, float maxStamina)
@@ -86,8 +51,6 @@ namespace SpaceGame.Core
             if (_currentStamina > 0)
             {
                 _currentStamina -= staminaAmount * Time.deltaTime;
-                FadeIn = true;
-                FadeOut = false;
             }
         }
 
@@ -96,8 +59,7 @@ namespace SpaceGame.Core
             if (_currentStamina > 0)
             {
                 _currentStamina -= staminaAmount;
-                FadeIn = true;
-                FadeOut = false;
+                onStaminaChanged.Raise();
             }
         }
 
@@ -112,8 +74,8 @@ namespace SpaceGame.Core
             {
                 _currentStamina = _currentMaxStamina;
             }
-            FadeIn = true;
-            FadeOut = false;
+
+            onStaminaChanged.Raise();
         }
     }
 }

@@ -1,29 +1,31 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using SpaceGame.Core;
 using SpaceGame.Player;
+using SpaceGame.NotImportant;
 
 namespace SpaceGame.Designe.Obstacles
 {
-    public class EffectTheSpeed : MonoBehaviour //, IDontDestroy
+    public class EffectTheSpeed : MonoBehaviour, IDontDestroy
     {
         [SerializeField] private float AddToSpeed;
         private static float AreInColision = 0;
 
-        private void Start()
+        private Player_Movement player_movement;
+        private float theTrueSpeed;
+
+        private void Awake()
         {
-            Debug.Log("DontForgetMe");
+            player_movement = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Movement>();
+            theTrueSpeed = player_movement.speed;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Player"))
             {
-                PlayerMovement.backToNormalSpeed = false;
                 if (AreInColision < 1)
                 {
-                    PlayerMovement.theTrueSpeed += AddToSpeed;
+                    player_movement.speed = theTrueSpeed + AddToSpeed;
                 }
 
                 AreInColision += 1;
@@ -44,7 +46,7 @@ namespace SpaceGame.Designe.Obstacles
                 if (AreInColision == 0)
                 {
                     yield return new WaitForSeconds(0.1f);
-                    PlayerMovement.backToNormalSpeed = true;
+                    player_movement.speed = theTrueSpeed;
                 }
             }
         }

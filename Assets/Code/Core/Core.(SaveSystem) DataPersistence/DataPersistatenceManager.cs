@@ -35,6 +35,8 @@ namespace SpaceGame.Core.SaveSystem
             dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
         }
 
+        #region Save&Load in
+
         private void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -55,6 +57,8 @@ namespace SpaceGame.Core.SaveSystem
         {
             SaveGame();
         }
+
+        #endregion
 
         #region Actions
         public void NewGame()
