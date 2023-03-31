@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SpaceGame.Core;
+using SpaceGame.Core.Stats;
 
 namespace SpaceGame.Designe.Obstacles
 {
@@ -13,7 +13,7 @@ namespace SpaceGame.Designe.Obstacles
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                GameManager.gameManager._PlayerHealth.HealUnit(healAmount);
+                StatsManager.statsManager._PlayerHealth.HealUnit(healAmount);
             }
         }
     }

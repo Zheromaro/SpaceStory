@@ -1,21 +1,20 @@
+using SpaceGame.Core.GameEvent;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceGame.Designe
 {
-    public abstract class CheckForPlayer : MonoBehaviour
+    public class CheckForPlayer : MonoBehaviour
     {
-        //public bool touched = false;
+        [SerializeField] private VoidEvent onPlayerIn;
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Player"))
             {
-                //touched = true;
-                Here();
+                onPlayerIn.Raise();
             }
         }
-
-        public abstract void Here();
     }
 }

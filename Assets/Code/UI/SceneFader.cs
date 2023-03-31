@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using SpaceGame.Core;
 using SpaceGame.Core.SaveSystem;
+using SpaceGame.Core.Stats;
 
 
 namespace SpaceGame.UI
@@ -46,7 +46,7 @@ namespace SpaceGame.UI
 
             yield return new WaitForSeconds(1);
 
-            GameManager.gameManager._PlayerHealth.Health = 100;
+            StatsManager.statsManager._PlayerHealth.Health = 100;
             Time.timeScale = 1f;
 
             yield return new WaitForSeconds(WaitFor);
@@ -61,7 +61,7 @@ namespace SpaceGame.UI
 
             yield return new WaitForSeconds(1);
 
-            GameManager.gameManager._PlayerHealth.Health = 100;
+            StatsManager.statsManager._PlayerHealth.Health = 100;
             Time.timeScale = 1f;
 
             yield return new WaitForSeconds(WaitFor);

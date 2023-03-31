@@ -20,7 +20,7 @@ namespace SpaceGame.Player.Abilites
             cooldownSystem = GetComponent<System_Cooldown>();
         }
 
-        public virtual void OnPerformed(InputAction.CallbackContext obj) 
+        public virtual void OnPerformed(InputAction.CallbackContext obj)
         {
             if (cooldownSystem.IsOnCooldown(id)) { return; }
             cooldownSystem.PutOnCooldown(this);

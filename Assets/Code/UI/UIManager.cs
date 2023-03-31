@@ -70,9 +70,10 @@ namespace SpaceGame.UI
 
         private void Resume()
         {
+            gameOverMenu.SetActive(false);
             pauseMenu.SetActive(false);
+            WinMenu.SetActive(false);
             healthVisual.SetActive(true);
-
 
             InputManager.ToggeleActionMap(InputManager.inputActions.Player);
             Time.timeScale = 1f;
@@ -85,8 +86,9 @@ namespace SpaceGame.UI
             gameOverMenu.SetActive(true);
         }
 
-        private void Win()
+        public void Win()
         {
+            healthVisual.SetActive(false);
             WinMenu.SetActive(true);
         }
     }

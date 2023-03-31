@@ -1,30 +1,25 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using SpaceGame.Core.Stats;
 using SpaceGame.Core;
 
 namespace SpaceGame.Player.Abilites
 {
     public class Ability_Sprint : Ability
     {
-        private InputAction Input_Sprint;
-        private Animator animator;
-        private Player_Movement player_movement;
-        private float theTrueSpeed;
-        private bool isSprinting = false;
-
         [SerializeField] private SoundEffectSO sfx_Sprinting;
         [SerializeField] private float AddToSpeed;
         [SerializeField] private float StaminaUses;
+
+        private InputAction Input_Sprint;
+        private Animator animator;
 
         public override void Start()
         {
             base.Start();
             GameObject Line = transform.Find("The line").gameObject;
             animator = Line.GetComponent<Animator>();
-            player_movement = GetComponent<Player_Movement>();
-
-            theTrueSpeed = player_movement.speed;
             sfx_Sprinting.Prepare();
         }
 
@@ -42,35 +37,31 @@ namespace SpaceGame.Player.Abilites
             Input_Sprint.canceled -= OnCanceled;
         }
 
-        private void Update()
-        {
-            if(isSprinting == false) { return; }
-
-            GameManager.gameManager._PlayerStamina.UseStaminaByTime(StaminaUses);
-        }
-
         public override void OnPerformed(InputAction.CallbackContext obj)
         {
             base.OnPerformed(obj);
-            if(GameManager.gameManager._PlayerStamina.Stamina <= 0) { return; }
+            if(StatsManager.statsManager._PlayerStamina.Stamina <= 0) { return; }
 
-            EffectManager.effectManager.Play("SpeedLines");
+            // Mechanics
+            StatsManager.statsManager._PlayerSpeed.AddToSpeed(AddToSpeed);
+            StatsManager.statsManager._PlayerStamina.startUseStaminaByTime(StaminaUses);
 
-            isSprinting = true;
+            // Effects
+            ParticalsManager.particalsManager.Play("SpeedLines");
             animator.SetBool("Sprinting", true);
             sfx_Sprinting.Play();
-            player_movement.speed = theTrueSpeed + AddToSpeed;
         }
 
         public void OnCanceled(InputAction.CallbackContext obj)
         {
-            if (GameManager.gameManager._PlayerStamina.Stamina <= 0) { return; }
+            // Mechanics
+            StatsManager.statsManager._PlayerSpeed.BackToOriSpeed();
+            StatsManager.statsManager._PlayerStamina.stopUseStaminaByTime();
 
-            EffectManager.effectManager.Stop("SpeedLines");
 
-            isSprinting = false;
+            // Effects
+            ParticalsManager.particalsManager.Stop("SpeedLines");
             animator.SetBool("Sprinting", false);
-            player_movement.speed = theTrueSpeed;
         }
     }
 }

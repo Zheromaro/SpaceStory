@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using SpaceGame.Core;
+using SpaceGame.Core.Stats;
 
 namespace SpaceGame.Designe.Obstacles
 {
@@ -18,11 +17,17 @@ namespace SpaceGame.Designe.Obstacles
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            StartCoroutine(DeathEffect());
+            if(StatsManager.statsManager._PlayerSpeed.isSprinting == true)
+            {
+                StartCoroutine(DeathEffect());
+            }
         }
         private void OnCollisionStay2D(Collision2D collision)
         {
-            StartCoroutine(DeathEffect());
+            if (StatsManager.statsManager._PlayerSpeed.isSprinting == true)
+            {
+                StartCoroutine(DeathEffect());
+            }
         }
 
         private IEnumerator DeathEffect()

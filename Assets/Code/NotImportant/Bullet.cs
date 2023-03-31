@@ -1,4 +1,5 @@
 using UnityEngine;
+using SpaceGame.Enemy;
 
 namespace SpaceGame.NotImportant
 {
@@ -7,7 +8,6 @@ namespace SpaceGame.NotImportant
         [SerializeField] private float speed = 20f;
         [SerializeField] private int damage = 40;
         [SerializeField] private Rigidbody2D rb;
-
 
         private void FixedUpdate()
         {
@@ -21,17 +21,16 @@ namespace SpaceGame.NotImportant
 
         void OnTriggerEnter2D(Collider2D hitInfo)
         {
-            IDamagable enemy = hitInfo.GetComponent<IDamagable>();
-            IDontDestroy dontDestroy = hitInfo.GetComponent<IDontDestroy>();
+            Iuntouchable keepBullet = hitInfo.GetComponent<Iuntouchable>();
 
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage);
-                gameObject.SetActive(false);
-            }
+            if (keepBullet != null)
+                return;
 
-            if (dontDestroy == null)
+            EnemyHealth enemy;
+
+            if (enemy = hitInfo.GetComponent<EnemyHealth>())
             {
+                enemy.GetHit(damage, gameObject);
                 gameObject.SetActive(false);
             }
 
@@ -40,9 +39,9 @@ namespace SpaceGame.NotImportant
 
         private void OnTriggerExit2D(Collider2D hitInfo)
         {
-            IDontDestroy dontDestroy = hitInfo.GetComponent<IDontDestroy>();
+            Iuntouchable keepBullet = hitInfo.GetComponent<Iuntouchable>();
 
-            if (dontDestroy == null)
+            if (keepBullet == null)
             {
                 gameObject.SetActive(false);
             }

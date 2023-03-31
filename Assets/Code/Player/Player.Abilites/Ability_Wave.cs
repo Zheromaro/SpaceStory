@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using SpaceGame.Core.Stats;
 using SpaceGame.Core;
 using SpaceGame.Enemy;
 
@@ -38,26 +39,26 @@ namespace SpaceGame.Player.Abilites
         public override void OnPerformed(InputAction.CallbackContext obj)
         {
             base.OnPerformed(obj);
-            if (GameManager.gameManager._PlayerStamina.Stamina > 0 && waveAnimator.GetBool("Do waveAttack") == false)
+            if (StatsManager.statsManager._PlayerStamina.Stamina > 0 && waveAnimator.GetBool("Do waveAttack") == false)
             {
-                StartCoroutine(Flip());
-                GameManager.gameManager._PlayerStamina.UseStamina(StaminaUses);
+                StartCoroutine(WaveAttack());
+                StatsManager.statsManager._PlayerStamina.UseStamina(StaminaUses);
             }
         }
 
-        private IEnumerator Flip()
+        private IEnumerator WaveAttack()
         {
-            GameManager.gameManager._PlayerHealth.InDefence = true;
+            StatsManager.statsManager._PlayerHealth.DoDefence = true;
             waveAnimator.SetBool("Do waveAttack", true);
 
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(player.position, attackRange, enemyLayer);
 
             foreach (Collider2D enemy in hitEnemies)
             {
-                enemy.GetComponent<EnemyHealth>().TakeDamage(waveAttackDamege);
+                enemy.GetComponent<EnemyHealth>().GetHit(waveAttackDamege, enemy.gameObject);
             }
             yield return new WaitForSeconds(ShildingTime);
-            GameManager.gameManager._PlayerHealth.InDefence = false;
+            StatsManager.statsManager._PlayerHealth.DoDefence = false;
         }
 
     }

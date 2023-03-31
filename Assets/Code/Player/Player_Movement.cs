@@ -1,40 +1,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SpaceGame.Core;
+using SpaceGame.Core.Stats;
 using SpaceGame.Core.SaveSystem;
 
 namespace SpaceGame.Player
 {
     public class Player_Movement : MonoBehaviour, IDataPersistence
     {
-        #region GetTheComponent
+        public bool freeMovement = true;
+        public bool Direction = false;
+        [SerializeField] private float LevelDegreeOfControling;
 
+        [HideInInspector] public Vector2 movement;
+        [HideInInspector] public float Manual = 1f;
+        private float x;
+        private float y;
         private InputAction Input_Move;
         private Rigidbody2D rb;
         private Animator animator;
-        #endregion
-
-        #region movement
-
-        [Space(8)]
-        [Header("ForMovement")]
-        [HideInInspector] public Vector2 movement;
-        [HideInInspector] public float Manual = 1f;
-        public bool freeHorizontalMovement = false;
-        public bool freeVerticalMovement = true;
-        private float x;
-        private float y;
-        #endregion
-
-        #region speed
-
-        [Space(8)]
-        public float speed;
-        [SerializeField] private float plusAmount;
-        [SerializeField] private float minusAmount;
-
-        private float checkForSpeed;
-        #endregion
 
         //------------------------------------------------------------------
 
@@ -43,10 +27,9 @@ namespace SpaceGame.Player
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             Input_Move = InputManager.inputActions.Player.Movement;
-
-            checkForSpeed = speed;
         }
 
+        #region Saving...
         public void LoadData(GameData data)
         {
             this.transform.position = data.playerPosition;
@@ -56,27 +39,31 @@ namespace SpaceGame.Player
         {
             // Nothing...
         }
+        #endregion
 
         private void Update()
         {
-            if (freeHorizontalMovement)
+            if (freeMovement)
             {
                 movement.x = Input_Move.ReadValue<Vector2>().x;
-            }
-            else
-            {
-                x = Input_Move.ReadValue<Vector2>().x * plusAmount;
-                movement.x = Manual + x;
-            }
-
-            if (freeVerticalMovement)
-            {
                 movement.y = Input_Move.ReadValue<Vector2>().y;
             }
             else
             {
-                y = Input_Move.ReadValue<Vector2>().y * minusAmount;
-                movement.y = Manual + y;
+                if (Direction)
+                {
+                    y = Input_Move.ReadValue<Vector2>().y * LevelDegreeOfControling;
+                    movement.y = Manual + y;
+
+                    movement.x = Input_Move.ReadValue<Vector2>().x;
+                }
+                else
+                {
+                    x = Input_Move.ReadValue<Vector2>().x * LevelDegreeOfControling;
+                    movement.x = Manual + x;
+
+                    movement.y = Input_Move.ReadValue<Vector2>().y;
+                }
             }
 
             animator.SetFloat("Horizontal", movement.x);
@@ -88,7 +75,7 @@ namespace SpaceGame.Player
         {
             if (movement.x > 0.1f || movement.x < -0.1f || movement.y > 0.1f || movement.y < -0.1f)
             {
-                rb.AddForce(new Vector2(movement.x * speed, movement.y * speed), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(movement.x * StatsManager.statsManager._PlayerSpeed.speed, movement.y * StatsManager.statsManager._PlayerSpeed.speed), ForceMode2D.Impulse);
             }
         }
     }

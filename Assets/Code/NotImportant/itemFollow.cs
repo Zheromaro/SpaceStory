@@ -1,5 +1,5 @@
 using UnityEngine;
-using SpaceGame.Core;
+using SpaceGame.Core.Stats;
 
 namespace SpaceGame.NotImportant
 {
@@ -28,12 +28,12 @@ namespace SpaceGame.NotImportant
             {
                 if (stamina == true)
                 {
-                    GameManager.gameManager._PlayerStamina.RegenStamina(33f);
+                    StatsManager.statsManager._PlayerStamina.RegenStamina(33f);
                 }
 
                 if (heal == true)
                 {
-                    GameManager.gameManager._PlayerHealth.HealUnit(20);
+                    StatsManager.statsManager._PlayerHealth.HealUnit(20);
                 }
                 gameObject.SetActive(false);
             }
